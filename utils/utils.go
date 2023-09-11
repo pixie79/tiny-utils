@@ -6,7 +6,10 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/base64"
+	"encoding/binary"
+	"encoding/gob"
 	"fmt"
 	"os"
 	"sort"
@@ -172,6 +175,18 @@ func TimePtr(t time.Time) time.Time {
 	return t
 }
 
+// CreateBytes encodes the given data to bytes using gob encoding.
+//
+// data: the data to be encoded
+// []byte: the encoded data as a byte slice
+func CreateBytes(data any) []byte {
+	var envBuffer bytes.Buffer
+	encData := gob.NewEncoder(&envBuffer)
+	err := encData.Encode(data)
+	MaybeDie(err, "encoding to bytes failed")
+	return envBuffer.Bytes()
+}
+
 // CreateKey generates a key for encryption.
 //
 // key: The byte array used to generate the key.
@@ -184,4 +199,28 @@ func CreateKey(key []byte) []byte {
 	} else {
 		return key
 	}
+}
+
+// intToBytes converts an integer to a byte array.
+//
+// It takes an integer as a parameter and returns a byte array.
+func intToBytes(n int) []byte {
+	byteArray := make([]byte, 4)
+	binary.BigEndian.PutUint32(byteArray, uint32(n))
+	return byteArray
+}
+
+// addZeroToStart adds a zero byte at the start of the given byte array.
+//
+// byteArray: the input byte array
+// Returns: the modified byte array with a zero byte added at the start
+func addZeroToStart(byteArray []byte) []byte {
+	return append([]byte{0}, byteArray...)
+}
+
+// EncodedBuffer returns the encoded buffer of an integer.
+//
+// It takes an integer as input and returns a byte slice that represents the encoded buffer.
+func EncodedBuffer(i int) []byte {
+	return addZeroToStart(intToBytes(i))
 }

@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	avro "github.com/linkedin/goavro/v2"
-	"github.com/pixie79/data-utils/utils"
+	"github.com/pixie79/tiny-utils/utils"
 )
 
 // GetSchemaIdFromPayload returns the schema id from the payload

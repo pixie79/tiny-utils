@@ -9,11 +9,11 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/pixie79/data-utils/utils"
+	utils "github.com/pixie79/tiny-utils/utils"
 	sr "github.com/redpanda-data/redpanda/src/go/transform-sdk/sr"
 )
 
-// GetSchemaTiny retrieves the schema with the given ID from the specified URL.
+// GetSchema retrieves the schema with the given ID from the specified URL.
 //
 // Parameters:
 // - id: The ID of the schema (as a string).
@@ -21,7 +21,7 @@ import (
 //
 // Returns:
 // - The retrieved schema (as a string).
-func GetSchemaTiny(id string) string {
+func GetSchema(id string) string {
 	registry := sr.NewClient()
 	schemaIdInt, err := strconv.Atoi(id)
 	utils.Print("DEBUG", fmt.Sprintf("Schema ID: %s", id))
@@ -29,4 +29,14 @@ func GetSchemaTiny(id string) string {
 	schema, err := registry.LookupSchemaById(schemaIdInt)
 	utils.MaybeDie(err, fmt.Sprintf("Unable to retrieve schema for ID: %s", id))
 	return schema.Schema
+}
+
+// ExtractID extracts the ID from a byte slice.
+//
+// Takes a byte slice as input.
+// Returns an integer.
+func ExtractID(msg []byte) int {
+	schemaID, err := sr.ExtractID(msg)
+	utils.MaybeDie(err, fmt.Sprintf("Unable to retrieve schema for id: %d", msg))
+	return schemaID
 }
