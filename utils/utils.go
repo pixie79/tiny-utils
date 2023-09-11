@@ -6,13 +6,8 @@
 package utils
 
 import (
-	"bufio"
-	"bytes"
 	"encoding/base64"
-	"encoding/gob"
 	"fmt"
-	"io"
-	"math/rand"
 	"os"
 	"sort"
 	"strings"
@@ -71,26 +66,6 @@ func GetEnvOrDie(key string) string {
 		Die(fmt.Sprintf("%s: environment variable not set", key))
 	}
 	return value
-}
-
-// LinesFromReader returns an array of strings representing each line read from the provided io.Reader.
-//
-// The function takes an io.Reader as a parameter and scans it line by line using a bufio.Scanner.
-// Each line is then appended to the `lines` array.
-// After scanning is complete, the function checks for any errors and calls the MaybeDie function if there is any error.
-// Finally, the `lines` array is returned.
-func LinesFromReader(r io.Reader) []string {
-	var lines []string
-
-	scanner := bufio.NewScanner(r)
-
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	err := scanner.Err()
-	MaybeDie(err, "could not parse lines")
-
-	return lines
 }
 
 // InBetween checks if a number is within a given range.
@@ -189,18 +164,6 @@ func DifferenceInSlices(l1, l2 []string) ([]string, []string, []string) {
 	return missingL1, missingL2, common
 }
 
-// CreateBytes encodes the given data to bytes using gob encoding.
-//
-// data: the data to be encoded
-// []byte: the encoded data as a byte slice
-func CreateBytes(data any) []byte {
-	var envBuffer bytes.Buffer
-	encData := gob.NewEncoder(&envBuffer)
-	err := encData.Encode(data)
-	MaybeDie(err, "encoding to bytes failed")
-	return envBuffer.Bytes()
-}
-
 // TimePtr takes a time.Time parameter and returns the same time.Time value.
 //
 // t: a time.Time parameter.
@@ -221,14 +184,4 @@ func CreateKey(key []byte) []byte {
 	} else {
 		return key
 	}
-}
-
-func RandomString(n int) string {
-	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letterRunes[rand.Intn(len(letterRunes))]
-	}
-	return string(b)
 }
