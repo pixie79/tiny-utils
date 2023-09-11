@@ -6,10 +6,11 @@
 package utils
 
 import (
-	"bytes"
+	// "bytes"
 	"encoding/base64"
 	"encoding/binary"
-	"encoding/gob"
+
+	// "encoding/gob"
 	"fmt"
 	"os"
 	"sort"
@@ -175,17 +176,17 @@ func TimePtr(t time.Time) time.Time {
 	return t
 }
 
-// CreateBytes encodes the given data to bytes using gob encoding.
-//
-// data: the data to be encoded
-// []byte: the encoded data as a byte slice
-func CreateBytes(data any) []byte {
-	var envBuffer bytes.Buffer
-	encData := gob.NewEncoder(&envBuffer)
-	err := encData.Encode(data)
-	MaybeDie(err, "encoding to bytes failed")
-	return envBuffer.Bytes()
-}
+// // CreateBytes encodes the given data to bytes using gob encoding.
+// //
+// // data: the data to be encoded
+// // []byte: the encoded data as a byte slice
+// func CreateBytes(data any) []byte {
+// 	var envBuffer bytes.Buffer
+// 	encData := gob.NewEncoder(&envBuffer)
+// 	err := encData.Encode(data)
+// 	MaybeDie(err, "encoding to bytes failed")
+// 	return envBuffer.Bytes()
+// }
 
 // CreateKey generates a key for encryption.
 //
