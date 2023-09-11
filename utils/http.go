@@ -6,6 +6,7 @@
 package utils
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"net/http"
@@ -45,4 +46,24 @@ func UrlToLines(url string, username string, password string) []string {
 	}
 
 	return LinesFromReader(res.Body)
+}
+
+// LinesFromReader returns an array of strings representing each line read from the provided io.Reader.
+//
+// The function takes an io.Reader as a parameter and scans it line by line using a bufio.Scanner.
+// Each line is then appended to the `lines` array.
+// After scanning is complete, the function checks for any errors and calls the MaybeDie function if there is any error.
+// Finally, the `lines` array is returned.
+func LinesFromReader(r io.Reader) []string {
+	var lines []string
+
+	scanner := bufio.NewScanner(r)
+
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	err := scanner.Err()
+	MaybeDie(err, "could not parse lines")
+
+	return lines
 }
