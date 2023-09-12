@@ -35,8 +35,7 @@ func GetSchema(id string) string {
 //
 // Takes a byte slice as input.
 // Returns an integer.
-func ExtractID(msg []byte) int {
+func ExtractID(msg []byte) (int, error) {
 	schemaID, err := sr.ExtractID(msg)
-	utils.MaybeDie(err, fmt.Sprintf("Unable to retrieve schema for id: %d", msg))
-	return schemaID
+	return schemaID, err
 }
