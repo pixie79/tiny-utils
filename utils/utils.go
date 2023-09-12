@@ -18,13 +18,31 @@ import (
 	"time"
 )
 
+var (
+	LogLevel string
+)
+
+func init() {
+	LogLevel = GetEnvDefault("LOG_LEVEL", "INFO")
+}
+
 // Print prints the given message with the specified log level.
 //
 // Parameters:
 //   - level: the log level to use (e.g. "INFO", "ERROR").
 //   - msg: the message to be printed.
 func Print(level, msg string) {
-	fmt.Printf("%s: %s\n", strings.ToUpper(level), msg)
+	switch strings.ToUpper(LogLevel) {
+	case "WARNING":
+		fmt.Printf("%s: %s\n", strings.ToUpper(level), msg)
+	case "ERROR":
+		fmt.Printf("%s: %s\n", strings.ToUpper(level), msg)
+	case "DEBUG":
+		fmt.Printf("%s: %s\n", strings.ToUpper(level), msg)
+	case "INFO":
+		fmt.Printf("%s: %s\n", strings.ToUpper(level), msg)
+	}
+
 }
 
 // GetEnvDefault retrieves the value of the environment variable specified by the key.
